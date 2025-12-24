@@ -1,7 +1,7 @@
 
 import React, { useRef, useState, Suspense } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Text, MeshTransmissionMaterial, Image } from '@react-three/drei';
+import { Text, Image } from '@react-three/drei';
 import * as THREE from 'three';
 import { Partner, NodePosition } from '../types';
 
@@ -10,6 +10,7 @@ const Group = 'group' as any;
 const Mesh = 'mesh' as any;
 const SphereGeometry = 'sphereGeometry' as any;
 const MeshBasicMaterial = 'meshBasicMaterial' as any;
+const MeshPhysicalMaterial = 'meshPhysicalMaterial' as any;
 
 interface SphereNodeProps {
   partner: Partner;
@@ -19,12 +20,12 @@ interface SphereNodeProps {
   isHighlighted: boolean;
 }
 
-const SphereNode: React.FC<SphereNodeProps> = ({ 
-  partner, 
-  position, 
-  onSelect, 
-  isDimmed, 
-  isHighlighted 
+const SphereNode: React.FC<SphereNodeProps> = ({
+  partner,
+  position,
+  onSelect,
+  isDimmed,
+  isHighlighted
 }) => {
   const outerRef = useRef<THREE.Mesh>(null);
   const innerRef = useRef<THREE.Group>(null);
@@ -56,17 +57,12 @@ const SphereNode: React.FC<SphereNodeProps> = ({
         onPointerOut={() => setHovered(false)}
         onClick={() => onSelect(partner)}
       >
-        <SphereGeometry args={[0.35, 32, 32]} />
-        <MeshTransmissionMaterial
-          backside
-          samples={4}
+        <SphereGeometry args={[0.35, 16, 16]} />
+        <MeshPhysicalMaterial
+          transmission={1}
           thickness={1}
           roughness={0.05}
-          chromaticAberration={0.02}
-          anisotropy={0.1}
-          distortion={0.1}
-          distortionScale={0.1}
-          temporalDistortion={0.1}
+          ior={1.5}
           clearcoat={1}
           attenuationDistance={0.5}
           attenuationColor="#ffffff"
@@ -87,7 +83,7 @@ const SphereNode: React.FC<SphereNodeProps> = ({
             toneMapped={false}
           />
         </Suspense>
-        
+
         {/* Floating Label when hovered or highlighted */}
         {(hovered || isHighlighted) && (
           <Text
