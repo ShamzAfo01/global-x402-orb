@@ -35,7 +35,7 @@ const SphereNode: React.FC<SphereNodeProps> = ({
 
   // Use a reliable PNG-based service to avoid loading issues. 
   // Dicebear initials with explicit .png extension helps Three.js loader detection.
-  const logoUrl = partner.logo || `https://api.dicebear.com/9.x/initials/png?seed=${encodeURIComponent(partner.name)}&backgroundColor=0052ff&fontFamily=Arial&fontWeight=700&size=128`;
+  const logoUrl = partner.logo || `https://api.dicebear.com/9.x/initials/png?seed=${encodeURIComponent(partner.name)}&backgroundColor=0052ff&fontFamily=Arial&fontWeight=700`;
 
   useFrame((state) => {
     if (outerRef.current) {
@@ -57,18 +57,12 @@ const SphereNode: React.FC<SphereNodeProps> = ({
         onClick={() => onSelect(partner)}
       >
         <SphereGeometry args={[0.35, 16, 16]} />
-        <meshPhysicalMaterial
-          transmission={0.9}
-          thickness={1}
-          roughness={0.1}
-          ior={1.5}
-          clearcoat={1}
-          attenuationDistance={1}
-          attenuationColor="#ffffff"
+        <meshStandardMaterial
+          roughness={0.2}
+          metalness={0.1}
           color={isHighlighted ? "#60A5FA" : "#D1E9FF"}
           transparent
           opacity={opacity}
-          side={THREE.DoubleSide}
         />
       </Mesh>
 
