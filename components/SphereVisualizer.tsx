@@ -1,7 +1,6 @@
 
 import React, { useMemo, useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
-import { OrbitControls, PerspectiveCamera, Environment } from '@react-three/drei';
+import { OrbitControls, PerspectiveCamera, Environment, Preload } from '@react-three/drei';
 import * as THREE from 'three';
 import SphereNode from './SphereNode';
 import { Partner } from '../types';
@@ -17,58 +16,46 @@ interface SphereVisualizerProps {
 }
 
 const SphereVisualizer: React.FC<SphereVisualizerProps> = ({ onSelectPartner, selectedPartner }) => {
-  const groupRef = useRef<THREE.Group>(null);
-  const radius = 5.5;
+  const radius = 5.2;
 
-  // Fibonacci Sphere algorithm
   const nodes = useMemo(() => {
     const n = EXTENDED_PARTNERS.length;
-    const phi = Math.PI * (3 - Math.sqrt(5)); // golden angle
+    const phi = Math.PI * (3 - Math.sqrt(5)); // Golden angle
     
     return EXTENDED_PARTNERS.map((partner, i) => {
-      const y = 1 - (i / (n - 1)) * 2; // y goes from 1 to -1
-      const r = Math.sqrt(1 - y * y); // radius at y
-      const theta = phi * i; // golden angle increment
-      
-      const x = Math.cos(theta) * r;
-      const z = Math.sin(theta) * r;
+      const y = 1 - (i / (n - 1)) * 2;
+      const r = Math.sqrt(1 - y * y);
+      const theta = phi * i;
       
       return {
         partner,
         position: {
-          x: x * radius,
+          x: Math.cos(theta) * r * radius,
           y: y * radius,
-          z: z * radius
+          z: Math.sin(theta) * r * radius
         }
       };
     });
   }, [radius]);
 
-  // Main sphere is now static (auto-rotation disabled as requested)
-  useFrame((state) => {
-    // No-op to keep it static. 
-    // User can still move it via OrbitControls.
-  });
-
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0, 14]} fov={45} />
+      <PerspectiveCamera makeDefault position={[0, 0, 13]} fov={40} />
       <OrbitControls 
         enablePan={false} 
         enableZoom={true} 
-        minDistance={4} 
-        maxDistance={20} 
-        rotateSpeed={0.5}
+        minDistance={6} 
+        maxDistance={18} 
+        rotateSpeed={0.55}
         makeDefault
       />
       
-      <AmbientLight intensity={0.6} />
-      <PointLight position={[10, 10, 10]} intensity={1.5} color="#3B82F6" />
-      <PointLight position={[-10, -10, -10]} intensity={0.5} color="#93C5FD" />
+      <AmbientLight intensity={1.2} />
+      <PointLight position={[10, 10, 10]} intensity={1} />
       
       <Environment preset="city" />
 
-      <Group ref={groupRef}>
+      <Group>
         {nodes.map(({ partner, position }) => (
           <SphereNode 
             key={partner.id}
@@ -80,6 +67,9 @@ const SphereVisualizer: React.FC<SphereVisualizerProps> = ({ onSelectPartner, se
           />
         ))}
       </Group>
+      
+      {/* Pre-warm assets for a smoother experience */}
+      <Preload all />
     </>
   );
 };
