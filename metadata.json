@@ -1,0 +1,5 @@
+{
+  "name": "X402 Ecosystem Orb",
+  "description": "An interactive 3D visualization of the Agentic Commerce ecosystem partners using a Fibonacci sphere algorithm and Three.js.",
+  "requestFramePermissions": []
+}
