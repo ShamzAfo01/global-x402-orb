@@ -10,7 +10,6 @@ const Group = 'group' as any;
 const Mesh = 'mesh' as any;
 const SphereGeometry = 'sphereGeometry' as any;
 const MeshBasicMaterial = 'meshBasicMaterial' as any;
-const MeshPhysicalMaterial = 'meshPhysicalMaterial' as any;
 
 interface SphereNodeProps {
   partner: Partner;
@@ -58,17 +57,18 @@ const SphereNode: React.FC<SphereNodeProps> = ({
         onClick={() => onSelect(partner)}
       >
         <SphereGeometry args={[0.35, 16, 16]} />
-        <MeshPhysicalMaterial
-          transmission={1}
+        <meshPhysicalMaterial
+          transmission={0.9}
           thickness={1}
-          roughness={0.05}
+          roughness={0.1}
           ior={1.5}
           clearcoat={1}
-          attenuationDistance={0.5}
+          attenuationDistance={1}
           attenuationColor="#ffffff"
           color={isHighlighted ? "#60A5FA" : "#D1E9FF"}
           transparent
           opacity={opacity}
+          side={THREE.DoubleSide}
         />
       </Mesh>
 
