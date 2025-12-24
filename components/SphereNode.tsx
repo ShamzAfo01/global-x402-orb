@@ -36,7 +36,7 @@ const SphereNode: React.FC<SphereNodeProps> = ({
 
   // Use a reliable PNG-based service to avoid loading issues. 
   // Dicebear initials with explicit .png extension helps Three.js loader detection.
-  const logoUrl = partner.logo || `https://api.dicebear.com/9.x/initials/png?seed=${encodeURIComponent(partner.name)}&backgroundColor=0052ff&fontFamily=Arial&fontWeight=700`;
+  const logoUrl = partner.logo || `https://api.dicebear.com/9.x/initials/png?seed=${encodeURIComponent(partner.name)}&backgroundColor=0052ff&fontFamily=Arial&fontWeight=700&size=128`;
 
   useFrame((state) => {
     if (outerRef.current) {
