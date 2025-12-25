@@ -1,23 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>X402 Ecosystem Orb</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-
-    canvas {
-      touch-action: none;
-    }
-  </style>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>X402 Ecosystem Orb</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      }
+      canvas {
+        touch-action: none;
+      }
+    </style>
   <script type="importmap">
 {
   "imports": {
@@ -27,15 +26,14 @@
     "@react-three/fiber": "https://esm.sh/@react-three/fiber@^9.4.2",
     "@react-three/drei": "https://esm.sh/@react-three/drei@^10.7.7",
     "three": "https://esm.sh/three@^0.182.0",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "three/": "https://esm.sh/three@^0.182.0/",
+    "gsap": "https://esm.sh/gsap@^3.14.2"
   }
 }
 </script>
 </head>
-
-<body>
-  <div id="root"></div>
-  <script type="module" src="/index.tsx"></script>
-</body>
-
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
