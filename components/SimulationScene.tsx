@@ -1,4 +1,3 @@
-
 import React, { useMemo, useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { useScroll, PerspectiveCamera, OrbitControls } from '@react-three/drei';
@@ -9,14 +8,6 @@ import PartnerGlobe from './PartnerGlobe';
 import { Partner } from '../types';
 import { EXTENDED_PARTNERS } from '../constants';
 
-const Group = 'group' as any;
-const Mesh = 'mesh' as any;
-const BoxGeometry = 'boxGeometry' as any;
-const MeshStandardMaterial = 'meshStandardMaterial' as any;
-const AmbientLight = 'ambientLight' as any;
-const TorusGeometry = 'torusGeometry' as any;
-const MeshBasicMaterial = 'meshBasicMaterial' as any;
-
 interface SimulationSceneProps {
   onSelectPartner: (partner: Partner) => void;
   selectedPartner: Partner | null;
@@ -26,7 +17,7 @@ export const SimulationScene: React.FC<SimulationSceneProps> = ({ onSelectPartne
   const { camera, mouse } = useThree();
   const scroll = useScroll();
   const controlsRef = useRef<any>(null);
-  
+
   // Arrange partners in clusters along the Z axis (The "Path")
   const partnerNodes = useMemo(() => {
     return EXTENDED_PARTNERS.map((partner, i) => {
@@ -36,7 +27,7 @@ export const SimulationScene: React.FC<SimulationSceneProps> = ({ onSelectPartne
       const radius = 6 + Math.sin(i * 0.5) * 3;
       const x = Math.cos(angle) * radius;
       const y = Math.sin(angle) * radius;
-      
+
       return {
         partner,
         position: [x, y, z] as [number, number, number]
@@ -60,7 +51,7 @@ export const SimulationScene: React.FC<SimulationSceneProps> = ({ onSelectPartne
       if (node && controlsRef.current) {
         const [tx, ty, tz] = node.position;
         const targetVec = new THREE.Vector3(tx, ty, tz);
-        
+
         // Move camera to look at the club
         const camPos = new THREE.Vector3(tx, ty, tz + 6);
 
@@ -85,12 +76,12 @@ export const SimulationScene: React.FC<SimulationSceneProps> = ({ onSelectPartne
 
   useFrame((state) => {
     const scrollOffset = scroll.offset; // 0 to 1
-    
+
     if (!selectedPartner) {
       // Traversal: Camera follows the Z-Path based on scroll
       const targetZ = -scrollOffset * 150 + 10;
       camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.05);
-      
+
       // Parallax mouse effect
       camera.position.x += (mouse.x * 4 - camera.position.x) * 0.05;
       camera.position.y += (-mouse.y * 4 - camera.position.y) * 0.05;
@@ -101,38 +92,38 @@ export const SimulationScene: React.FC<SimulationSceneProps> = ({ onSelectPartne
   });
 
   return (
-    <Group>
+    <group>
       <PerspectiveCamera makeDefault position={[0, 0, 10]} fov={55} />
-      <OrbitControls 
+      <OrbitControls
         ref={controlsRef}
-        enablePan={false} 
+        enablePan={false}
         enableZoom={false} // Zoom is handled by scroll
-        makeDefault 
+        makeDefault
         rotateSpeed={0.3}
       />
 
-      <AmbientLight intensity={0.5} />
-      
+      <ambientLight intensity={0.5} />
+
       <Particles />
 
       {/* Traversal Obstacles - Protocol Gates */}
-      <Group>
+      <group>
         {gates.map((gate, i) => (
-          <Mesh key={i} position={[0, 0, gate.z]}>
-            <TorusGeometry args={[12, 0.05, 16, 4]} rotation={[0, 0, Math.PI / 4]} />
-            <MeshBasicMaterial color={gate.color} transparent opacity={0.15} blending={THREE.AdditiveBlending} />
-            
+          <mesh key={i} position={[0, 0, gate.z]} rotation={[0, 0, Math.PI / 4]}>
+            <torusGeometry args={[12, 0.05, 16, 4]} />
+            <meshBasicMaterial color={gate.color} transparent opacity={0.15} blending={THREE.AdditiveBlending} />
+
             {/* Inner Grid Obstacle */}
-            <Mesh>
-              <BoxGeometry args={[24, 24, 0.01]} />
-              <MeshBasicMaterial color={gate.color} transparent opacity={0.02} wireframe />
-            </Mesh>
-          </Mesh>
+            <mesh>
+              <boxGeometry args={[24, 24, 0.01]} />
+              <meshBasicMaterial color={gate.color} transparent opacity={0.02} wireframe />
+            </mesh>
+          </mesh>
         ))}
-      </Group>
+      </group>
 
       {/* MIDI Clubs (Partner Nodes) */}
-      <Group>
+      <group>
         {partnerNodes.map(({ partner, position }) => (
           <PartnerGlobe
             key={partner.id}
@@ -143,7 +134,7 @@ export const SimulationScene: React.FC<SimulationSceneProps> = ({ onSelectPartne
             isHighlighted={selectedPartner?.id === partner.id}
           />
         ))}
-      </Group>
-    </Group>
+      </group>
+    </group>
   );
 };
